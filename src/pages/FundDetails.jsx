@@ -78,58 +78,83 @@ const FundDetails = () => {
     }
 
     return (
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8 max-w-7xl">
             <button
                 onClick={() => navigate('/')}
-                className="flex items-center text-gray-600 hover:text-gray-900 mb-6 transition-colors"
+                className="flex items-center text-gray-600 hover:text-gray-900 mb-4 sm:mb-6 transition-colors text-sm sm:text-base"
             >
-                <ArrowLeft className="w-5 h-5 mr-2" />
+                <ArrowLeft className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 Back to Search
             </button>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-8">
-                <div className="flex justify-between items-start mb-6">
-                    <div>
-                        <h1 className="text-2xl font-bold text-gray-900 mb-2">{fund.meta.scheme_name}</h1>
-                        <p className="text-gray-500">{fund.meta.fund_house} • {fund.meta.scheme_category}</p>
+            <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 lg:p-8">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
+                    <div className="flex-1">
+                        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2 wrap-break-word">
+                            {fund.meta.scheme_name}
+                        </h1>
+                        <p className="text-sm sm:text-base text-gray-600 wrap-break-word">
+                            {fund.meta.fund_house} • {fund.meta.scheme_category}
+                        </p>
                     </div>
                     <button
                         onClick={handleDownloadPDF}
-                        className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                        className="flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors whitespace-nowrap text-sm sm:text-base w-full sm:w-auto"
                     >
-                        <Download className="w-4 h-4 mr-2" />
+                        <Download className="h-4 w-4 sm:h-5 sm:w-5" />
                         Download Report
                     </button>
                 </div>
 
-                <div className="mb-8">
-                    <div className="text-3xl font-bold text-gray-900">₹{fund.data[0].nav}</div>
-                    <div className="text-sm text-gray-500">Latest NAV ({fund.data[0].date})</div>
+                <div className="bg-blue-50 rounded-lg p-4 sm:p-6 mb-6 sm:mb-8">
+                    <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-900">
+                        ₹{fund.data[0].nav}
+                    </div>
+                    <div className="text-xs sm:text-sm text-blue-700 mt-1">
+                        Latest NAV ({fund.data[0].date})
+                    </div>
                 </div>
 
-                <div ref={chartRef} className="mb-8">
-                    <NavChart data={fund.data.slice(0, 10)} />
+                <div ref={chartRef} className="mb-6 sm:mb-8 bg-white p-2 sm:p-4 rounded-lg overflow-hidden">
+                    <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-900">
+                        NAV History
+                    </h2>
+                    <div className="w-full overflow-x-auto">
+                        <NavChart data={fund.data} />
+                    </div>
                 </div>
 
-                <div>
-                    <h3 className="text-lg font-semibold mb-4 text-gray-800">Recent NAV History</h3>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="border-b border-gray-100">
-                                    <th className="py-3 text-sm font-medium text-gray-500">Date</th>
-                                    <th className="py-3 text-sm font-medium text-gray-500">NAV</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {fund.data.slice(0, 10).map((entry) => (
-                                    <tr key={entry.date} className="border-b border-gray-50 last:border-0 hover:bg-gray-50">
-                                        <td className="py-3 text-gray-900">{entry.date}</td>
-                                        <td className="py-3 text-gray-900">₹{entry.nav}</td>
+                <div className="overflow-hidden">
+                    <h2 className="text-lg sm:text-xl font-semibold mb-4 text-gray-900">
+                        Recent NAV History
+                    </h2>
+                    <div className="overflow-x-auto -mx-4 sm:mx-0">
+                        <div className="inline-block min-w-full align-middle px-4 sm:px-0">
+                            <table className="min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Date
+                                        </th>
+                                        <th className="px-3 sm:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            NAV
+                                        </th>
                                     </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody className="bg-white divide-y divide-gray-200">
+                                    {fund.data.slice(0, 10).map((entry, index) => (
+                                        <tr key={index} className="hover:bg-gray-50">
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {entry.date}
+                                            </td>
+                                            <td className="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                ₹{entry.nav}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
